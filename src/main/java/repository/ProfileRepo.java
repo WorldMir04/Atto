@@ -45,6 +45,30 @@ public class ProfileRepo {
     }
 
 
+    public Result register(Profile profile) {
+        try {
+            Result result = checkParam(profile);
+            if (!result.isSuccess()) {
+                return new Result(result.getMessage(), false);
+            }
+            Class.forName("org.postgresql.Driver");
+            Connection connection = DriverManager.getConnection(url, dbUser, dbPassword);
+            String sql = "insert into profile(name, surname, phone, password, created_date, status)" + "values(?, ?, ?, ?, now(), ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, profile.getName());
+            preparedStatement.setString(2, profile.getSurname());
+            preparedStatement.setString(3, profile.getPhone());
+            preparedStatement.setString(4, profile.getPassword());
+            preparedStatement.setString(5, "active");
+            preparedStatement.execute();
+            return new Result("Successfully registered", true);
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            return new Result("Error in server", false);
+        }
+    }
+
     private Result checkParam(Profile profile) {
         if (Objects.isNull(profile)) {
             return new Result("Data was required", false);
