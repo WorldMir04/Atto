@@ -1,6 +1,4 @@
-package org.company;
-
-public class Main {
+public class ATTO {
     public static void main(String[] args) {
         
     }
