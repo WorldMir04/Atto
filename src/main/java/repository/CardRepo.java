@@ -166,5 +166,21 @@ public class CardRepo {
         return false;
     }
 
+    public void addCard(String number, String phone) {
+
+        try {
+            Connection connection = DataBase.getConnection();
+            String sql = "update card set status=?,phone=? where number =?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "active");
+            preparedStatement.setString(2, phone);
+            preparedStatement.setString(3, number);
+            preparedStatement.execute();
+            System.out.println("Card added ");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }
