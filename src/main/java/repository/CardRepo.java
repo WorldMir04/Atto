@@ -128,20 +128,43 @@ public class CardRepo {
         }
     }
 
-        public void deleteCard (String number){
+    public void deleteCard(String number) {
 
-            try {
-                Connection connection=DataBase.getConnection();
-                String sql = "delete from card where number =?";
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setString(1,"number");
-                preparedStatement.execute();
-                System.out.println("Card deleted");
+        try {
+            Connection connection = DataBase.getConnection();
+            String sql = "delete from card where number =?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "number");
+            preparedStatement.execute();
+            System.out.println("Card deleted");
 
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+
+    public boolean findCardAndCheckStatus(String number) {
+
+        try {
+            Connection connection = DataBase.getConnection();
+            String sql = "select * from card where number=?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "status");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                String status = resultSet.getString("status");
+                if (status.equals("status")) {
+                    return true;
+                }
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
 
 
 }
