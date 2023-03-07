@@ -5,6 +5,7 @@ import dto.Profile;
 import entity.Result;
 import enums.Role;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -162,6 +163,24 @@ public class ProfileRepo {
             throw new RuntimeException(e);
         }
         return false;
+    }
+
+    public void changeStatus(String phone, String status) {
+
+        try {
+            Connection connection = DataBase.getConnection();
+            String sql = "update profile set status=? where phone =?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "status");
+            preparedStatement.setString(2, "phone");
+            preparedStatement.execute();
+
+            System.out.println("Status successfully changed");
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
