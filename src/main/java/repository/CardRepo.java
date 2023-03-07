@@ -93,4 +93,23 @@ public class CardRepo {
         return null;
     }
 
+    public boolean findCard(String number) {
+
+        try {
+            Connection connection = DataBase.getConnection();
+            String sql = "select * from card where number =?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "number");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+
+    }
+
 }
