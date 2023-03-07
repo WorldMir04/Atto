@@ -182,5 +182,33 @@ public class CardRepo {
         }
     }
 
+    public List<Card> getUserCard(String i_phone) {
+
+        try {
+            Connection connection = DataBase.getConnection();
+            String sql = "select * from card where number =?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "number");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<Card> cards = new ArrayList<>();
+
+            while (resultSet.next()) {
+                String number = resultSet.getString("number");
+                String exp_date = resultSet.getString("exp_date");
+                Double balance = resultSet.getDouble("balance");
+                String status = resultSet.getString("status");
+                String phone = resultSet.getString("phone");
+                LocalDate date = LocalDate.from(resultSet.getTimestamp("created_date").toLocalDateTime());
+
+                Card card = new Card(number, exp_date, balance, status, phone, date);
+                cards.add(card);
+            }
+            return cards;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }
