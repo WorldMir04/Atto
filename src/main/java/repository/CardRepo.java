@@ -232,5 +232,23 @@ public class CardRepo {
         }
     }
 
+    public Result refill(String number, Double balance) {
+
+        try {
+            Connection connection = DataBase.getConnection();
+            String sql = "update card set balance =? where number =?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setDouble(1, balance);
+            preparedStatement.setString(2, number);
+            preparedStatement.execute();
+            return new Result("Refilled payment successfully ", true);
+
+        } catch (SQLException e) {
+            return new Result("error in server , try again later", false);
+        }
+
+
+    }
+
 
 }
