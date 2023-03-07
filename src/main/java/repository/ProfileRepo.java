@@ -1,11 +1,15 @@
 package repository;
 
+import db.DataBase;
 import dto.Profile;
 import entity.Result;
 import enums.Role;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ProfileRepo {
@@ -112,5 +116,29 @@ public class ProfileRepo {
         }
 
     }
+        public List<Profile> getAllProfiles() {
+
+            try {
+                Connection connection= DataBase.getConnection();
+                String sql = "select * from profile";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                ArrayList<Profile>profiles=new ArrayList<>();
+
+                while (resultSet.next()){
+                    String name = resultSet.getString("name");
+                    String surnamename = resultSet.getString("surname");
+                    String phone = resultSet.getString("phone");
+                    String status = resultSet.getString("status");
+                    LocalDate time= LocalDate.from(resultSet.getTimestamp("created_date").toLocalDateTime());
+                    Role role= Role.valueOf(resultSet.getString("role"));
+                    Profile profile= new Profile(name,surnamename,phone,time,status,role);
+                    profiles.add(profile);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return null;
+        }
 
 }
