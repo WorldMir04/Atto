@@ -4,12 +4,15 @@ import db.DataBase;
 import dto.Card;
 import entity.Result;
 
+import javax.swing.plaf.PanelUI;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static java.time.LocalDateTime.now;
 
 public class CardRepo {
     public Result createCard(String number, String exp_date) {
@@ -27,7 +30,7 @@ public class CardRepo {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, "number");
             preparedStatement.setString(2, "exp_date");
-            preparedStatement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(now()));
             preparedStatement.execute();
             return new Result("Card successfully created", true);
         } catch (SQLException e) {
@@ -208,6 +211,25 @@ public class CardRepo {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void deleteCarduser(String number, String phone) {
+
+        try {
+
+            Connection connection = DataBase.getConnection();
+            String sql = "update card set status =? , phone =? where phone=? and number =?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            LocalDateTime now = now();
+            preparedStatement.setString(1, "active");
+            preparedStatement.setString(2, null);
+            preparedStatement.setString(3, phone);
+            preparedStatement.setString(4, number);
+            preparedStatement.execute();
+            System.out.println("Card deleted from user ");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
