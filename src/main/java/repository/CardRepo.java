@@ -270,5 +270,23 @@ public class CardRepo {
         return false;
     }
 
+    public Result payment(String cardNumber) {
+        try {
+//            double fare = 1400;
+            Connection connection = DataBase.getConnection();
+            String sql = "update card set balance = balance - 1400 where number = ?";
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sql);
+            preparedStatement1.setString(1, cardNumber);
+            String sqlComBalance = "update company_balance set balance = balance + 1400";
+            Statement statement = connection.createStatement();
+            statement.execute(sqlComBalance);
+            preparedStatement1.execute();
+            return new Result("Balance was successfully replenished", true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new Result("Error in server", false);
+        }
+    }
+
 
 }
