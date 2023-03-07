@@ -112,4 +112,21 @@ public class CardRepo {
 
     }
 
+    public Result updateCard(String oldNumber, String newNumber, String newExpdate) {
+
+        try {
+            Connection connection = DataBase.getConnection();
+            String sql = "update card set number =?,exp_date=? where number =?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, newNumber);
+            preparedStatement.setString(2, newExpdate);
+            preparedStatement.setString(3, oldNumber);
+            preparedStatement.execute();
+            return new Result("card successflly updated", true);
+        } catch (SQLException e) {
+            return new Result("Error in server ", false);
+        }
+    }
+
+
 }
