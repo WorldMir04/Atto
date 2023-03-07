@@ -128,5 +128,20 @@ public class CardRepo {
         }
     }
 
+        public void deleteCard (String number){
+
+            try {
+                Connection connection=DataBase.getConnection();
+                String sql = "delete from card where number =?";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1,"number");
+                preparedStatement.execute();
+                System.out.println("Card deleted");
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
 
 }
