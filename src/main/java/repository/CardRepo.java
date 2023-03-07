@@ -250,5 +250,25 @@ public class CardRepo {
 
     }
 
+    public boolean findCardAndCheckStatusByPhone(String number, String phone) {
+        try {
+            Connection connection = DataBase.getConnection();
+            String sql = "select * from card where number = ? and phone= ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, number);
+            preparedStatement.setString(2, phone);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String status = resultSet.getString("status");
+                if (status.equals("active")) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
 }
